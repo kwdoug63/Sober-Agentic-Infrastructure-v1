@@ -1,56 +1,62 @@
 Product Requirements Document (PRD)
-Project Name: Sober Agentic Infrastructure v1
+Project Name: Sober-Agentic-Infrastructure-v1
 Product Owner: Kenneth Wayne Douglas
-Date: March 12, 2026
+Date: March 13, 2026
 
 1. Vision & Mission
-This section tells the developer WHY they are building this and what the ultimate goal is.
+Company Vision: To establish the industry standard for reliable, constraint-driven AI agent operations, eliminating unpredictable behavior and ensuring safe execution in enterprise environments.
 
-Company Vision: [e.g., To create the most reliable, hallucination-free ecosystem for autonomous AI agents to operate within.]
-
-Project Mission: [e.g., To build a secure, containerized simulation environment where we can test and deploy task-driven AI agents.]
+Project Mission: To build a secure, containerized simulation and execution environment that enforces strict behavioral guardrails ("sobriety") for autonomous AI agents before they interact with real-world systems.
 
 2. Problem Statement
-What problem does this software solve for your users or your business?
-
-[e.g., Current AI agents are unpredictable. We need an infrastructure that forces them to act reliably ("sober") within strict, simulated boundaries before they are deployed to the real world.]
+Current autonomous AI agents (powered by LLMs) are prone to hallucinations, infinite loops, and goal drift. Enterprise adoption requires "sober" agents—AI systems that operate strictly within defined parameters, with full transparency and auditability. Currently, teams lack a standardized, lightweight infrastructure to test, constrain, and deploy these agents safely.
 
 3. Target Audience / Users
-Who will be using this infrastructure?
+Primary Users: AI Engineers, Data Scientists, and Enterprise IT system administrators.
 
-Primary User: [e.g., Internal AI Researchers, Data Scientists, or B2B Enterprise Clients.]
-
-User Needs: [e.g., They need a simple command-line interface to launch agent simulations and view the results in real-time.]
+User Needs: A streamlined, command-line interface (CLI) to configure agent guardrails, launch simulated tasks, and review detailed execution logs to verify the agent's reliability.
 
 4. Core Directives & MVP Features (Minimum Viable Product)
-This is the most important section for your developers. What is the absolute minimum this software must do in version 1?
+The Version 1 (MVP) build must focus on core architecture, reliability, and local containerized testing.
 
 Directive 1: The Simulator (simulator.py)
 
-The system must have a simulation engine that can generate a controlled environment for AI agents.
+Build a sandbox simulation loop where agent actions are proposed, monitored, and logged against predefined constraints (the "sobriety checks").
 
-It should accept basic input parameters (e.g., agent goals, environmental constraints).
+The simulator must intercept the agent's intended actions and validate them before allowing the loop to continue.
 
-It must log all agent actions to a secure file.
+Output detailed, timestamped JSON logs of every state change and decision made by the agent.
 
-Directive 2: The Main Application (main.py)
+Directive 2: The Orchestrator (main.py)
 
-This acts as the control center. It must be able to start, pause, and stop the simulator.
+Serve as the primary entry point and control center.
 
-It needs to handle the core logic of communicating between the user and the agent.
+Parse the user's initial objective/prompt and initialize the agent.
 
-Directive 3: Deployment (Dockerfile)
+Manage the execution loop: routing tasks to the agent, sending the agent's output to the simulator for validation, and returning the result.
 
-The entire application must be containerized using Docker so it runs identically on any machine without complex setup.
+Gracefully handle errors and force-stop the agent if it violates constraints.
+
+Directive 3: Deployment (Dockerfile & requirements.txt)
+
+The entire infrastructure must be containerized using Docker.
+
+Dependencies must be strictly locked in requirements.txt to prevent version conflicts.
+
+Deployment should require no more than standard docker build and docker run commands, making the software platform-agnostic.
 
 5. Out of Scope (For Version 1)
-This keeps developers focused and prevents "scope creep" (which costs you time and money).
+Graphical User Interface (GUI): V1 will be strictly a Command Line Interface (CLI) tool. No web dashboards or front-end frameworks yet.
 
-[e.g., We are NOT building a graphical user interface (GUI) or a website yet. V1 is strictly command-line/terminal based.]
+Complex API Integrations: We will not integrate with live external software (like Slack, Salesforce, or live Twitter) in V1. The agent will interact with "mock" tools within the simulator.
 
-[e.g., We are NOT integrating with external APIs like Twitter or Slack in V1.]
+Multi-Agent Swarms: V1 will focus on ensuring a single agent works flawlessly before introducing multiple agents communicating with each other.
 
-6. Success Metrics
-How will we know the developer has succeeded?
+6. Success Metrics for the Developer
+The developer delivers a working CLI application where a user can input a basic objective.
 
-[e.g., The developer can successfully run docker build and launch a 10-minute simulation without the program crashing.]
+The system successfully spins up, the agent attempts to solve the task, and the simulator.py correctly intercepts and logs the steps.
+
+The entire application builds and runs flawlessly inside a Docker container on any standard machine without crashing.
+
+Code is fully commented and includes basic unit tests for the constraint logic.
